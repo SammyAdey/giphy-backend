@@ -11,15 +11,16 @@ router.get("/:key", async (req, res) => {
 	var readStream = null;
 	try {
 		readStream = await getFileStream(key);
-		// throw error if file not found
-		readStream.on("error", (err) => {
-			console.log("File not found");
-			throw err;
-		});
 	} catch (error) {
-		console.log("File not found");
-		res.status(404).send("File not found");
+		console.log("Error occurred while fetching file:", error);
+		res.status(500).send("Error occurred while fetching file");
+		return;
 	}
+
+	readStream.on("error", (err) => {
+		console.log("Error occurred while streaming file:", err);
+		res.status(500).send("Error occurred while streaming file");
+	});
 
 	readStream.pipe(res);
 });
@@ -31,13 +32,7 @@ const getFileStream = async (fileKey) => {
 		Bucket: configDetails.bucketName,
 	};
 
-	return s3
-		.getObject(downloadParams)
-		.createReadStream()
-		.on("error", (err) => {
-			console.log("Error occurred while reading stream");
-			throw err;
-		});
+	return s3.getObject(downloadParams).createReadStream();
 };
 
 module.exports = router;
