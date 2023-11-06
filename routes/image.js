@@ -7,14 +7,17 @@ const s3 = new S3({ apiVersion: "2006-03-01" });
 
 router.get("/:key", (req, res) => {
 	const key = req.params.key;
+	console.log("Trying to fetch file with key: ", key);
 	try {
 		const readStream = getFileStream(key);
 		readStream.pipe(res);
+		console.log("File found");
 		// throw error if file not found
-		// readStream.on("error", (err) => {
-		// 	throw err;
-		// });
+		readStream.on("error", (err) => {
+			throw err;
+		});
 	} catch (error) {
+		console.log("File not found");
 		res.status(404).send("File not found");
 	}
 });
