@@ -40,8 +40,6 @@ const receiveMessage = (queueUrl) =>
 			MaxNumberOfMessages: 1,
 			MessageAttributeNames: ["All"],
 			QueueUrl: queueUrl,
-			WaitTimeSeconds: 20,
-			VisibilityTimeout: 50,
 		})
 	);
 

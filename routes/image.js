@@ -16,11 +16,6 @@ router.get("/:key", (req, res) => {
 		res.status(500).send("Error occurred while fetching file");
 		return;
 	}
-
-	readStream.on("error", (err) => {
-		console.log("Error occurred while streaming file:", err);
-		res.status(500).send("Error occurred while streaming file");
-	});
 });
 
 //downloads an image from s3
