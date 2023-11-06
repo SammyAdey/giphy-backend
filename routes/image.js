@@ -5,12 +5,12 @@ const { configDetails } = require("../config.js");
 
 const s3 = new S3({ apiVersion: "2006-03-01" });
 
-router.get("/:key", async (req, res) => {
+router.get("/:key", (req, res) => {
 	const key = req.params.key;
 	console.log("Trying to fetch file with key: ", key);
 	var readStream = null;
 	try {
-		readStream = await getFileStream(key);
+		readStream = getFileStream(key);
 	} catch (error) {
 		console.log("Error occurred while fetching file:", error.data);
 		res.status(500).send("Error occurred while fetching file");
@@ -26,7 +26,7 @@ router.get("/:key", async (req, res) => {
 });
 
 //downloads an image from s3
-const getFileStream = async (fileKey) => {
+const getFileStream = (fileKey) => {
 	const downloadParams = {
 		Key: fileKey,
 		Bucket: configDetails.bucketName,
