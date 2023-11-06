@@ -8,18 +8,20 @@ const s3 = new S3({ apiVersion: "2006-03-01" });
 router.get("/:key", (req, res) => {
 	const key = req.params.key;
 	console.log("Trying to fetch file with key: ", key);
+	var readStream = null;
 	try {
-		const readStream = getFileStream(key);
-		readStream.pipe(res);
-		console.log("File found");
+		readStream = getFileStream(key);
 		// throw error if file not found
 		readStream.on("error", (err) => {
+			console.log("File not found");
 			throw err;
 		});
 	} catch (error) {
 		console.log("File not found");
 		res.status(404).send("File not found");
 	}
+
+	readStream.pipe(res);
 });
 
 //downloads an image from s3
