@@ -5,12 +5,12 @@ const { configDetails } = require("../config.js");
 
 const s3 = new S3({ apiVersion: "2006-03-01" });
 
-router.get("/:key", (req, res) => {
+router.get("/:key", async (req, res) => {
 	const key = req.params.key;
 	console.log("Trying to fetch file with key: ", key);
 	var readStream = null;
 	try {
-		readStream = getFileStream(key);
+		readStream = await getFileStream(key);
 		// throw error if file not found
 		readStream.on("error", (err) => {
 			console.log("File not found");
@@ -21,11 +21,17 @@ router.get("/:key", (req, res) => {
 		res.status(404).send("File not found");
 	}
 
+	readStream.on("data", (chunk) => {
+		console.log("chunk: ", chunk);
+	});
+	readStream.on("end", () => {
+		console.log("Stream finished");
+	});
 	readStream.pipe(res);
 });
 
 //downloads an image from s3
-const getFileStream = (fileKey) => {
+const getFileStream = async (fileKey) => {
 	const downloadParams = {
 		Key: fileKey,
 		Bucket: configDetails.bucketName,
