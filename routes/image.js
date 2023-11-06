@@ -21,12 +21,6 @@ router.get("/:key", async (req, res) => {
 		res.status(404).send("File not found");
 	}
 
-	readStream.on("data", (chunk) => {
-		console.log("chunk: ", chunk);
-	});
-	readStream.on("end", () => {
-		console.log("Stream finished");
-	});
 	readStream.pipe(res);
 });
 
@@ -37,7 +31,13 @@ const getFileStream = async (fileKey) => {
 		Bucket: configDetails.bucketName,
 	};
 
-	return s3.getObject(downloadParams).createReadStream();
+	return s3
+		.getObject(downloadParams)
+		.createReadStream()
+		.on("error", (err) => {
+			console.log("Error occurred while reading stream");
+			throw err;
+		});
 };
 
 module.exports = router;
