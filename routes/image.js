@@ -12,7 +12,7 @@ router.get("/:key", async (req, res) => {
 	try {
 		readStream = await getFileStream(key);
 	} catch (error) {
-		console.log("Error occurred while fetching file:", error);
+		console.log("Error occurred while fetching file:", error.data);
 		res.status(500).send("Error occurred while fetching file");
 		return;
 	}
