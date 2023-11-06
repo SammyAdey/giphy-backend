@@ -8,9 +8,8 @@ const s3 = new S3({ apiVersion: "2006-03-01" });
 router.get("/:key", (req, res) => {
 	const key = req.params.key;
 	console.log("Trying to fetch file with key: ", key);
-	var readStream = null;
 	try {
-		readStream = getFileStream(key);
+		const readStream = getFileStream(key);
 		readStream.pipe(res);
 	} catch (error) {
 		console.log("Error occurred while fetching file:", error.data);
