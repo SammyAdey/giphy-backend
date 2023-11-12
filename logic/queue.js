@@ -7,7 +7,7 @@ const {
 	DeleteMessageBatchCommand,
 	GetQueueUrlCommand,
 } = require("@aws-sdk/client-sqs");
-const sqsClient = new SQSClient();
+const sqsClient = new SQSClient({ region: "ap-southeast-2" });
 const { configDetails } = require("../config.js");
 
 const getQueueUrl = async () => {

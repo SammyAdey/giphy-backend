@@ -9,14 +9,13 @@ const { configDetails } = require("./config.js");
 const { CreateQueueCommand, SQSClient } = require("@aws-sdk/client-sqs");
 var cors = require("cors");
 const AWS = require("aws-sdk");
-// const http = require("http");
 const PORT = 3000;
 require("dotenv").config();
 
 // Cloud Services Set-up
 // Create unique bucket name
 const s3 = new AWS.S3({ apiVersion: "2006-03-01" });
-const sqs = new SQSClient();
+const sqs = new SQSClient({ region: "ap-southeast-2" });
 
 (async () => {
 	try {
