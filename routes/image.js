@@ -7,22 +7,16 @@ const s3 = new S3({ apiVersion: "2006-03-01" });
 
 router.get("/:key", (req, res) => {
 	const key = req.params.key;
-	console.log("Trying to fetch file with key: ", key);
-	try {
-		const readStream = getFileStream(key);
-		readStream.pipe(res);
-	} catch (error) {
-		console.log("Error occurred while fetching file:", error.data);
-		res.status(500).send("Error occurred while fetching file");
-		return;
-	}
+	const readStream = getFileStream(key);
+
+	readStream.pipe(res);
 });
 
 //downloads an image from s3
 const getFileStream = (fileKey) => {
 	const downloadParams = {
 		Key: fileKey,
-		Bucket: configDetails.bucketName,
+		Bucket: "giphy-color-n11176261",
 	};
 
 	return s3.getObject(downloadParams).createReadStream();

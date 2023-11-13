@@ -1,12 +1,5 @@
 const express = require("express");
-const {
-	SQSClient,
-	SendMessageCommand,
-	ReceiveMessageCommand,
-	DeleteMessageCommand,
-	DeleteMessageBatchCommand,
-	GetQueueUrlCommand,
-} = require("@aws-sdk/client-sqs");
+const { SQSClient, SendMessageCommand, ReceiveMessageCommand, DeleteMessageCommand, GetQueueUrlCommand } = require("@aws-sdk/client-sqs");
 const sqsClient = new SQSClient({ region: "ap-southeast-2" });
 const { configDetails } = require("../config.js");
 
